@@ -148,15 +148,14 @@ export default class News extends Component {
       <div className="container my-3">
         <h2>News_KING -Top Headlines</h2>
         <div className="row">
-            <div className="col-md-3">
-                 <NewsItem title="mytitle" discription="my Discription" imageUrl="https://techcrunch.com/wp-content/uploads/2023/12/GettyImages-1079012962.jpg?resize=1200,786" newsUrl="TODO"/>
-            </div>
-            <div className="col-md-3">
-                 <NewsItem title="mytitle" discription="my Discription" />
-            </div>
-            <div className="col-md-3">
-                 <NewsItem title="mytitle" discription="my Discription" />
-            </div>
+            {this.state.articles.map((element)=>{
+
+                return  <div className="col-md-3" key={element.url}>
+                    <NewsItem title={element.title.slice(0,40)} discription={element.description.slice(0,80)} imageUrl={element.urlToImage} newsUrl={element.url}/>
+                </div>
+
+            })}
+           
         </div>
        
       </div>
