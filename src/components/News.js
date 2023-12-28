@@ -19,8 +19,8 @@ export default class News extends Component {
    
   };
 
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     // console.log(this.props.pageSize);
     this.state = {
       articles: [],
@@ -28,6 +28,7 @@ export default class News extends Component {
       page: 1,
       
     };
+    document.title=`${this.captilise(this.props.category) } | News_King`
   }
   async UpdateNews(a) {
     //console.log(this.state.page);
@@ -38,11 +39,11 @@ export default class News extends Component {
     }
     else if(a==='p')
     {
-    var url = `https://newsapi.org/v2/top-headlines?country=${this.props.country}&category=${this.props.category}&apiKey=9d376ea26913400b98530f13b929d09e&page=${this.state.page-1}&pageSize=${this.props.pageSize}`;
+     url = `https://newsapi.org/v2/top-headlines?country=${this.props.country}&category=${this.props.category}&apiKey=9d376ea26913400b98530f13b929d09e&page=${this.state.page-1}&pageSize=${this.props.pageSize}`;
     }
     else
     {
-    var url = `https://newsapi.org/v2/top-headlines?country=${this.props.country}&category=${this.props.category}&apiKey=9d376ea26913400b98530f13b929d09e&page=${this.state.page+1}&pageSize=${this.props.pageSize}`;
+     url = `https://newsapi.org/v2/top-headlines?country=${this.props.country}&category=${this.props.category}&apiKey=9d376ea26913400b98530f13b929d09e&page=${this.state.page+1}&pageSize=${this.props.pageSize}`;
     }
     this.setState({ loading: true });
     let data = await fetch(url);
@@ -71,12 +72,15 @@ export default class News extends Component {
     console.log("After"+this.state.page);
     this.UpdateNews('n');
   };
+  captilise=(str)=>{
+    return str.charAt(0).toUpperCase() + str.slice(1);
+  }
   render() {
     // console.log("ren");
     return (
       <div className="container my-3">
         <h1 className="text-center" style={{ margin: "30 px" }}>
-          News_KING -Top Headlines
+          News_KING -{this.captilise(this.props.category)} Top Headlines
         </h1>
         <div className="row">
           {this.state.loading && <Spinning />}
