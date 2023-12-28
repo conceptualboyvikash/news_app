@@ -6,12 +6,12 @@ import News from './components/News';
 
 export default class App extends Component {
 //  let  a="vikash";
-   a="vikash";
+  
   render() {
     return (
       <div>
         <NavBar/>
-        <News/>
+        <News pageSize={8} category="sports" country="in"/>
        
       </div>
     )
