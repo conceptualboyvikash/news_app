@@ -5,3 +5,21 @@ health
 science
 sports
 technology
+
+
+business
+entertainment
+general
+health
+science
+sports
+technology
+
+
+<Route path="/business" element={<News pageSize={8} category="business" country="in"/>}> </Route>
+<Route path="/entertainment" element={<News pageSize={8} category="entertainment" country="in"/>}> </Route>
+<Route path="/general" element={<News pageSize={8} category="general" country="in"/>}> </Route>
+<Route path="/health" element={<News pageSize={8} category="health" country="in"/>}> </Route>
+<Route path="/science" element={<News pageSize={8} category="science" country="in"/>}> </Route>
+<Route path="/about" element={<News pageSize={8} category="sports" country="in"/>}> </Route>
+<Route path="/technology" element={<News pageSize={8} category="technology" country="in"/>}> </Route>
