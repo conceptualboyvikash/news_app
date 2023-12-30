@@ -1,108 +1,89 @@
-import React, { Component } from "react";
+import React, { useState,useEffect } from "react";
 import NewsItem from "./NewsItem";
 import Spinning from "./Spinning";
 import PropTypes from "prop-types";
 import InfiniteScroll from "react-infinite-scroll-component";
 
 
-export default class News extends Component {
-  static defaultProps = {
-    country: "in",
-    pageSize: 8,
-    category: "general",
-    col: "success",
+const News=(props)=> {
+  
+  const[articles,setarticles]=useState([]);
+  //  const [loading,setloading]=useState(false);
+  const[page,setPage]=useState(1);
+  const[TotalArticles,settotalarticles]=useState(0);
+  
     
+ //   document.title=`${captilise(category) } | News_King`
+  
+  const UpdateNews=async()=> {
     
-  };
-  static propTypes = {
-    country: PropTypes.string,
-    pageSize: PropTypes.number,
-    category: PropTypes.string,
-    col: PropTypes.string,
-   
-  };
-
-  constructor(props) {
-    super(props);
-    // console.log(this.props.pageSize);
-    this.state = {
-      articles: [],
-      loading: false,
-      page: 1,
-      
-    };
-    document.title=`${this.captilise(this.props.category) } | News_King`
-  }
-  async UpdateNews() {
-    //console.log(this.state.page);
-    
-    this.props.pro_Val(10);
-    const url = `https://newsapi.org/v2/top-headlines?country=${this.props.country}&category=${this.props.category}&apiKey=${this.props.api_key}&page=${this.state.page}&pageSize=${this.props.pageSize}`;
-    
-    this.setState({ loading: true });
+    props.pro_Val(10);
+    const url = `https://newsapi.org/v2/top-headlines?country=${props.country}&category=${props.category}&apiKey=${props.api_key}&page=${page}&pageSize=${props.pageSize}`;
+    //  setloading(true);
     let data = await fetch(url);
-    this.props.pro_Val(40);
+    props.pro_Val(40);
 
     let con_data = await data.json();
-    this.props.pro_Val(70);
+    props.pro_Val(70);
 
-   
-    this.setState({
-      articles: con_data.articles,
-      TotalArticles: con_data.totalResults,
-      loading: false
-    });
-    this.props.pro_Val(100);
-   
-    
-    
+    setarticles(con_data.articles);
+    settotalarticles(con_data.totalResults);
+    //  setloading(false);
+    props.pro_Val(100);
   }
-  async componentDidMount() {
-    this.UpdateNews();
-   
-    
-  }
+
+   useEffect(()=>{
+        UpdateNews();
+        //eslint-disable-next-line
+    },[]);
+  
  
   
-  captilise=(str)=>{
+  const captilise=(str)=>{
     return str.charAt(0).toUpperCase() + str.slice(1);
     
   }
-  fetchMoreData = async() => {
-    
-    this.setState({page:this.state.page+1});
-    const url = `https://newsapi.org/v2/top-headlines?country=${this.props.country}&category=${this.props.category}&apiKey=${this.props.api_key}&page=${this.state.page}&pageSize=${this.props.pageSize}`;
-    
-    this.setState({ loading: true });
+   const fetchMoreData = async() => {
+    // console.log("ehllwo world");
+   // console.log("the page value is :",page);
+   
+   
+   // console.log("the page value is :",page);
+   
+   const url = `https://newsapi.org/v2/top-headlines?country=${props.country}&category=${props.category}&apiKey=${props.api_key}&page=${page+1}&pageSize=${props.pageSize}`;
+   setPage(page+1);
+      // setloading(true);
     let data = await fetch(url);
     let con_data = await data.json();
    
-    this.setState({
-      articles: this.state.articles.concat(con_data.articles),
-      TotalArticles: con_data.totalResults,
-      loading: false
-    });
+    setarticles(articles.concat(con_data.articles));
+    settotalarticles(con_data.totalResults);
+    //  setloading(false);
+    // console.log("helow beta kuch huaa");
+    console.log("ta dn al",TotalArticles," ",articles.length);
    
   };
-  render() {
-     console.log(this.state.articles.length,this.state.TotalArticles);
+ 
+    
     return (
       <div className="container my-3">
-        <h1 className="text-center" style={{ margin: "30 px" }}>
-          News_KING -{this.captilise(this.props.category)} Top Headlines
+        <h1 className="text-center" style={{ marginTop: '90px',
+    marginBottom: '30px'}}>
+          News_KING -{captilise(props.category)} Top Headlines
         </h1>
         <div className="row">
+          
         <InfiniteScroll
-          dataLength={this.state.articles.length}
-          next={this.fetchMoreData}
-          hasMore={this.state.articles.length <= this.state.TotalArticles}
+          dataLength={articles.length}
+          next={fetchMoreData}
+          hasMore={articles.length+props.pageSize <= TotalArticles}
           loader={<Spinning/>}
         >
           
         
           <div className="row">
           {
-            this.state.articles.map((element) => {
+            articles.map((element) => {
               return (
                 <div className="col-md-3" key={element.url}>
                   <NewsItem
@@ -111,7 +92,7 @@ export default class News extends Component {
                     author={!element.author ? "unknown" : element.author}
                     name={element.source.name}
                     discription={element.discription}
-                    col={this.props.col}
+                    col={props.col}
                     imageUrl={
                       element.urlToImage === null
                         ? "https://images.wsj.net/im-900511/social"
@@ -128,5 +109,22 @@ export default class News extends Component {
              </div>
       </div>
     );
-  }
+  
 }
+News.defaultProps = {
+  country: "in",
+  pageSize: 8,
+  category: "general",
+  col: "success",
+
+  
+  
+};
+News.propTypes = {
+  country: PropTypes.string,
+  pageSize: PropTypes.number,
+  category: PropTypes.string,
+  col: PropTypes.string,
+ 
+};
+export default News

@@ -1,11 +1,12 @@
-import React, { Component } from 'react'
+import React from 'react'
 import Plant from './Plant.gif'
-export default class Spinning extends Component {
-  render() {
+const Spinning=()=> {
+  
     return (
       <div className='text-center'>
         <img src={Plant} alt="spinning" />
       </div>
     )
-  }
+  
 }
+export default Spinning
